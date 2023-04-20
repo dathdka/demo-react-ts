@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 export const login: RequestHandler = async (req: Request, res: Response) => {
-  try {
+  
     const { email, password } = req.body;
     const account = await user.query().findOne("email", email);
     // check if email not exsist
@@ -30,8 +30,5 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
     );
 
     return res.status(200).json(token);
-  } catch (error) {
-    console.log(error);
-    return res.status(401).send("something went wrong, please try again later");
-  }
+
 };

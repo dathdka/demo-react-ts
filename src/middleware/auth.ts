@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { decodeToken } from "../util/decodeToken";
 
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) =>{
+export const authMiddleware  = (req: Request, res: Response, next: NextFunction) =>{
     let token : string = req.body.token || req.headers['authorization'] || '' ;
     token = token.replace('Bearer ',"")
     if(!token)

@@ -18,3 +18,5 @@ Content-Type: application/json
     "email" : "dathdka@gmail.com",
     "password" : "123456789"
 }
+###
+GET http://localhost:1235/manage/user?username
