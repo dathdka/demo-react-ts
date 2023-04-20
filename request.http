@@ -1,0 +1,20 @@
+POST http://localhost:1235/auth/register
+Content-Type: application/json
+
+{
+    "name" : "Hoang Dat",
+    "phone" : "0327227902",
+    "email" : "dathdka@gmail.com",
+    "password" : "123456789",
+    "address" : "Ha Tinh Ha Tinh Ha Tinh Ha Tinh",
+    "admin" : false
+}
+
+###
+POST http://localhost:1235/auth/login
+Content-Type: application/json
+
+{
+    "email" : "dathdka@gmail.com",
+    "password" : "123456789"
+}
