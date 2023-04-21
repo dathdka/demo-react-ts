@@ -4,7 +4,7 @@ Content-Type: application/json
 {
     "name" : "Hoang Dat",
     "phone" : "0327227902",
-    "email" : "dathdka@gmail.com",
+    "email" : "dathdka2@gmail.com",
     "password" : "123456789",
     "address" : "Ha Tinh Ha Tinh Ha Tinh Ha Tinh",
     "admin" : false
@@ -15,8 +15,30 @@ POST http://localhost:1235/auth/login
 Content-Type: application/json
 
 {
-    "email" : "dathdka@gmail.com",
+    "email" : "dathdka2@gmail.com",
     "password" : "123456789"
 }
 ###
 GET http://localhost:1235/manage/user?username
+
+
+###
+DELETE  http://localhost:1235/manage/delete-user
+Content-Type: application/json
+
+{
+    "id" : "kjqjuhe27ye872t283y"
+}
+###
+PUT http://localhost:1235/manage/update-user
+Content-Type: application/json
+
+{
+    "id" : "kjqjuhe27ye872t2833",
+    "name" : "rowValue1",
+    "phone" : "0327227902",
+    "email" : "hdat.dev1@gmail.com",
+    "password" : "khnasdjuioashd",
+    "address" : "Ha Tinh Ha Tinh Haf Tinh",
+    "admin" : true
+}

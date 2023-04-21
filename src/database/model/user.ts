@@ -1,7 +1,7 @@
 import { JSONSchema, Model } from "objection";
 
 class user extends Model {
-  id?: string;
+  id!: string;
   name!: string;
   phone!: string;
   email!: string;

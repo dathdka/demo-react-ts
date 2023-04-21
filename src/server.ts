@@ -7,13 +7,15 @@ import * as config from './database/knexfile'
 import authRoute from './Router/authRoute/authRouter'
 import manageRouter from "./Router/manage/manageRouter";
 import { errorMiddleware } from "./middleware/error";
+import cors from 'cors'
+
 const app = express();
 
 app.use(express.json());
-
+app.use(cors({origin: true}))
 // subcribe router
 app.use('/auth', authRoute)
-app.use('/manage', manageRouter )
+app.use('/manage', manageRouter)
 
 // app.use(errorMiddleware);
 
