@@ -1,4 +1,4 @@
-import { RequestHandler, Request, Response } from "express";
+import { RequestHandler, Request, Response, NextFunction } from "express";
 import { v4 } from "uuid";
 import bcrypt from "bcrypt";
 import user from "../../database/model/user";
@@ -10,20 +10,19 @@ const prepareData = async (userInfo : user) => {
   return userInfo
 } 
 
-export const register: RequestHandler = async (req: Request, res: Response) => {
+export const register: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     let userInfo: user = req.body;
     const isExsist = await user.query().findOne("email", userInfo.email);
-    if (isExsist) return res.status(402).send("email already exsist");
+    if (isExsist) return res.status(400).send("email already exsist");
   
     userInfo = await prepareData(userInfo)
   
     await user.query().insert(userInfo);
-    return res.status(200).send("register successfully");
+    return res.status(201).send("register successfully");
     
   } catch (error) {
-    console.log(error);
-    res.status(500).send('something went wrong, please try again later')
+    next(error)
   }
 
 };

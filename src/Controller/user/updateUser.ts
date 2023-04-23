@@ -1,8 +1,9 @@
-import { Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import user from "../../database/model/user";
 export const updateUser: RequestHandler = async (
   req: Request,
-  res: Response
+  res: Response,
+  next : NextFunction
 ) => {
   try {
     const updateUser: user = req.body;
@@ -10,7 +11,6 @@ export const updateUser: RequestHandler = async (
     return res.status(200).send("update user successfully");
     
   } catch (error) {
-    console.log(error);
-    res.status(500).send('something went wrong, please try again later')
+    next(error)
   }
 };

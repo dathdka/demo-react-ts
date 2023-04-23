@@ -10,14 +10,15 @@ import { errorMiddleware } from "./middleware/error";
 import cors from 'cors'
 
 const app = express();
-
 app.use(express.json());
 app.use(cors({origin: true}))
+
 // subcribe router
 app.use('/auth', authRoute)
 app.use('/manage', manageRouter)
 
-// app.use(errorMiddleware);
+// subcribe error handle
+app.use(errorMiddleware);
 
 const knex = Knex(config.development)
 Model.knex(knex)

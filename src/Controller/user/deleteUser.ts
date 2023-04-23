@@ -1,9 +1,10 @@
-import { Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import user from "../../database/model/user";
 
 export const deleteUser: RequestHandler = async (
   req: Request,
-  res: Response
+  res: Response,
+  next : NextFunction
 ) => {
   try {
     const { id } = req.body;
@@ -11,7 +12,6 @@ export const deleteUser: RequestHandler = async (
     return res.status(200).send("delete successfully");
     
   } catch (error) {
-    console.log(error);
-    res.status(500).send('something went wrong, please try again later')
+    next(error)
   }
 };
