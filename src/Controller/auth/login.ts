@@ -1,23 +1,12 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import user from "../../database/model/user";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { signToken } from "../../util/signToken";
+import { authResponse } from "../../types/authResponse";
+import _ from "lodash";
 import "dotenv/config";
 
-const signToken = (account: user) => {
-  return jwt.sign(
-    {
-      id: account.id,
-      email: account.email,
-      name: account.name,
-      admin: account.admin,
-    },
-    `${process.env.JWT_SECRETKEY}`,
-    {
-      expiresIn: "30d",
-    }
-  );
-};
+
 
 export const login: RequestHandler = async (
   req: Request,
@@ -26,7 +15,8 @@ export const login: RequestHandler = async (
 ) => {
   try {
     const { email, password } = req.body;
-    const account = await user.query().findOne("email", email);
+    let account = await user.query().findOne("email", email);
+
     // check if email not exsist
     if (!account) return res.status(400).send("email not exsist");
 
@@ -35,9 +25,11 @@ export const login: RequestHandler = async (
     if (!isCorrectPassword)
       return res.status(400).send("incorrect email or password");
 
-    const token = signToken(account);
-    return res.status(200).json(token);
-    
+    let userInfo : authResponse = _.omit(account,['password', 'admin'])
+    userInfo.token = signToken(account);
+
+
+    return res.status(200).json(userInfo);
   } catch (error) {
     next(error);
   }

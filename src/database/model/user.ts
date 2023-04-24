@@ -7,6 +7,7 @@ class user extends Model {
   email!: string;
   password!: string;
   address!: string;
+  dob! : string;
   admin?: boolean;
 
   static tableName: string = "users";
@@ -21,6 +22,7 @@ class user extends Model {
       email: { type: "string", minLength: 6, maxLength: 30 },
       password: { type: "string" },
       address: { type: "string", minLength: 10, maxLength: 50 },
+      dob: {type:'string'},
       admin: { type: "boolean" },
     },
   };

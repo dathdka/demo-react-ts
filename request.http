@@ -4,9 +4,10 @@ Content-Type: application/json
 {
     "name" : "Hoang Dat",
     "phone" : "0327227902",
-    "email" : "dathdka2@gmail.com",
+    "email" : "dathdka@gmail.com",
     "password" : "123456789",
     "address" : "Ha Tinh Ha Tinh Ha Tinh Ha Tinh",
+    "dob" : "1999/09/22",
     "admin" : false
 }
 
@@ -15,11 +16,11 @@ POST http://localhost:1235/auth/login
 Content-Type: application/json
 
 {
-    "email" : "dathdka2@gmail.com",
+    "email" : "dathdka@gmail.com",
     "password" : "123456789"
 }
 ###
-GET http://localhost:1235/manage/user?username
+GET http://localhost:1235/manage/user?username=&currentPage=0
 
 
 ###
@@ -30,7 +31,7 @@ Content-Type: application/json
     "id" : "kjqjuhe27ye872t283y"
 }
 ###
-PUT http://localhost:1235/manage/update-user
+PUT http://localhost:1236/manage/update-user
 Content-Type: application/json
 
 {
