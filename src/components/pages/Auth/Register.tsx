@@ -1,11 +1,12 @@
-import {Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { useState } from "react";
 import { user } from "../../../types/user";
 import { register } from "../../../services/api";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { textHandle } from "../../shared/textHandle";
-import { registerSchema } from "../../shared/validateInput";
+import { infoSchema } from "../../shared/validateInput";
+
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -13,25 +14,27 @@ const Login: React.FC = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [dob, setDoB] = useState("1999-01-01");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const registerHandle = async () => {
-    
     let userInfo: user = {
       name: name,
       email: email,
       phone: phone,
-      address : address,
+      address: address,
+      dob: dob,
       password: password,
     };
-    registerSchema.validate(userInfo)
-    .then((value) =>{
-      console.log(value);
-    })
-    .catch((reason) =>{
-      console.log(reason);
-    })
-    // console.log(userInfo);
+  
+    infoSchema
+      .validate(userInfo)
+      .then((value) => {
+        console.log(value);
+      })
+      .catch((reason) => {
+        alert(reason)
+      });
     // await register(userInfo)
   };
   return (
@@ -43,7 +46,7 @@ const Login: React.FC = () => {
           <Form.Control
             type="email"
             placeholder="email"
-            onChange={(e)=>textHandle(e.target.value,setEmail)}
+            onChange={(e) => textHandle(e.target.value, setEmail)}
           />
         </Form.Group>
         <Form.Group className="mb-3">
@@ -51,7 +54,7 @@ const Login: React.FC = () => {
           <Form.Control
             type="text"
             placeholder="name"
-            onChange={(e)=>textHandle(e.target.value,setName)}
+            onChange={(e) => textHandle(e.target.value, setName)}
           />
         </Form.Group>
         <Form.Group className="mb-3">
@@ -59,15 +62,22 @@ const Login: React.FC = () => {
           <Form.Control
             type="text"
             placeholder="Address"
-            onChange={(e)=>textHandle(e.target.value,setAddress)}
+            onChange={(e) => textHandle(e.target.value, setAddress)}
           />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Phone number</Form.Label>
           <Form.Control
-            type="text"
+            type="number"
             placeholder="Phone number"
-            onChange={(e)=>textHandle(e.target.value,setPhone)}
+            onChange={(e) => textHandle(e.target.value, setPhone)}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Date of birth</Form.Label>
+          <Form.Control
+            type="date"
+            onChange={(e) => textHandle(e.target.value, setDoB)}
           />
         </Form.Group>
         <Form.Group className="mb-3">
@@ -75,7 +85,7 @@ const Login: React.FC = () => {
           <Form.Control
             type="password"
             placeholder="password"
-            onChange={(e)=>textHandle(e.target.value,setPassword)}
+            onChange={(e) => textHandle(e.target.value, setPassword)}
           />
         </Form.Group>
         <Form.Group className="mb-3">
@@ -83,11 +93,11 @@ const Login: React.FC = () => {
           <Form.Control
             type="password"
             placeholder="Confirm password"
-            onChange={(e)=>textHandle(e.target.value,setConfirmPassword)}
+            onChange={(e) => textHandle(e.target.value, setConfirmPassword)}
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit" onClick={registerHandle}>
+        <Button variant="primary" onClick={registerHandle}>
           Submit
         </Button>
       </Form>

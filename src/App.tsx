@@ -7,12 +7,17 @@ import {
 import Login from "./components/pages/Auth/Login";
 import Register from "./components/pages/Auth/Register";
 import "./style/style.css";
-import { store } from "./redux/store";
-import { Provider } from "react-redux";
-
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
+import { alert } from "./types/alert";
+import { useState, useEffect } from "react";
+import { useAppDispatch } from "./hooks";
+import { useAppSelector } from "./hooks";
+import { CustomAlert } from "./components/shared/CustomAlert";
 function App() {
+
   return (
-    <Provider store={store}>
+    <>
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -20,7 +25,8 @@ function App() {
           <Route path="/" element={<Navigate to="/register" replace />} />
         </Routes>
       </Router>
-    </Provider>
+      <CustomAlert />
+    </>
   );
 }
 

@@ -1,24 +1,27 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";  
 import { RootState } from "../../redux/store";
 import { user as userState } from "../../types/user"
-
-const initialState : userState = {
+import { loginInfo } from "../../types/loginInfo";
+import _ from 'lodash'
+const initialState : loginInfo = {
     id: '',
     name: '',
     phone : '',
     address : '',
-    admin: false
+    dob: '',
+    email: '',
+    token: ''
 }
 
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        userLogin : (state, action : PayloadAction<userState>) =>{
-            state = action.payload
+        userLogin : (state, action : PayloadAction<loginInfo>) =>{
+            return _.merge(state,action.payload)
         },
-        userLogout : (state, action: PayloadAction<userState>) =>{
-            state = initialState
+        userLogout : (state) =>{
+            return _.merge(state,initialState)
         }
     }
 })

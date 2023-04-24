@@ -6,5 +6,6 @@ export interface user {
     password?: string,
     address?: string,
     admin? : boolean,
+    dob? : string,
     token? : string
 }

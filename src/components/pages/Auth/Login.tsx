@@ -1,43 +1,44 @@
-import Input from '../../shared/Input'
+import Input from "../../shared/Input";
 import { Row, Col } from "react-bootstrap";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import { user } from "../../../types/user";
 import { login } from "../../../services/api";
-import { useAppDispatch } from '../../../hooks';
-import { userLogin } from '../../auth/auth.slice';
-import { useAppSelector } from '../../../hooks';
+import { useAppDispatch } from "../../../hooks";
+import { useAppSelector } from "../../../hooks";
+import { userLogin } from "../../auth/auth.slice";
+import { loginInfo } from "../../../types/loginInfo";
+import { setAlert } from "../../alert/alert.slice";
+import { alertStatus } from "../../alert/alert.slice";
 
-const Login: React.FC = (userInfo : user) => {
-
-  const dispatch = useAppDispatch()
-
+const Login: React.FC = (userInfo: user) => {
+  const dispatch = useAppDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const passwordHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
-  setPassword(event.target.value as string);
+    setPassword(event.target.value as string);
   const emailHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
-  setEmail(event.target.value as string);
-  
+    setEmail(event.target.value as string);
+  // const userInfo = useAppSelector((state) => state.auth);
 
-  const userStore = useAppSelector((state) => state.auth)
-  console.log(userStore);
   const loginHandle = async () => {
-    let userInfo: user = {
+    let account: user = {
       email: email,
       password: password,
     };
-    //  await login(userInfo);
-    //update state in store after make a request
-    // dispatch(userLogin())
-    
+    dispatch(setAlert({open: true, isError: true, message : 'test'}))
+    // const userInfo : loginInfo = await login(account);
+
+    // window.localStorage.setItem("token", userInfo.token as string);
+    //update state in store after make a request        
+    // dispatch(userLogin(userInfo));
   };
   return (
     <>
       <Row>
-        <h1 style={{ textAlign: "center", marginTop: "200px" }}>Login</h1>
+        <h1 style={{ marginLeft: '40%', marginTop: "200px" }}>Login</h1>
       </Row>
       <Row style={{ margin: "5% 200px" }}>
         <Col>
@@ -59,7 +60,5 @@ const Login: React.FC = (userInfo : user) => {
     </>
   );
 };
-
-
 
 export default Login;
