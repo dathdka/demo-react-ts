@@ -1,0 +1,44 @@
+POST http://localhost:1235/auth/register
+Content-Type: application/json
+
+{
+    "name" : "Hoang Dat",
+    "email" : "dathdka7@gmail.com",
+    "phone" : "0327227902",
+    "address" : "Ha Tinh Ha Tinh Ha Tinh Ha Tinh",
+    "dob" : "1999/09/22",
+    "password" : "123456789"
+}
+
+###
+POST http://localhost:1235/auth/login
+Content-Type: application/json
+
+{
+    "email" : "dathdka@gmail.com",
+    "password" : "123456789"
+}
+###
+GET http://localhost:1235/manage/user?username=&currentPage=0
+
+
+###
+DELETE  http://localhost:1235/manage/delete-user
+Content-Type: application/json
+
+{
+    "id" : "kjqjuhe27ye872t283y"
+}
+###
+PUT http://localhost:1236/manage/update-user
+Content-Type: application/json
+
+{
+    "id" : "kjqjuhe27ye872t2833",
+    "name" : "rowValue1",
+    "phone" : "0327227902",
+    "email" : "hdat.dev1@gmail.com",
+    "password" : "khnasdjuioashd",
+    "address" : "Ha Tinh Ha Tinh Haf Tinh",
+    "admin" : true
+}
