@@ -3,12 +3,11 @@ Content-Type: application/json
 
 {
     "name" : "Hoang Dat",
+    "email" : "dathdka7@gmail.com",
     "phone" : "0327227902",
-    "email" : "dathdka@gmail.com",
-    "password" : "123456789",
     "address" : "Ha Tinh Ha Tinh Ha Tinh Ha Tinh",
     "dob" : "1999/09/22",
-    "admin" : false
+    "password" : "123456789"
 }
 
 ###

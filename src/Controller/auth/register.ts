@@ -19,7 +19,7 @@ export const register: RequestHandler = async (req: Request, res: Response, next
     if (isExsist) return res.status(400).send("email already exsist");
   
     userInfo = await prepareData(userInfo)
-  
+    
     await user.query().insert(userInfo);
 
     let userRegister : authResponse = _.omit(userInfo,['password', 'admin'])
