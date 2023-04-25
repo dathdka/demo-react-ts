@@ -40,18 +40,18 @@ export const register = async (userInfo : user) =>{
 export const getUserByName = async (username : string = '', currentPage: number = 0) =>{
   try{
     const response = await api.get(`manage/user?username=${username}&currentPage=${currentPage}`)
-    console.log(response);
+    return response.data
   }catch(error: any){
-    console.log(error)
+    return error
   }
 }
 
 export const updateUser = async (userInfo : user) => {
   try {
     const response = await api.put('manage/update-user', userInfo)
-    console.log(response);
+    return response.data
   } catch (error) {
-    console.log(error);
+    return error
     
   }
 }
@@ -59,8 +59,8 @@ export const updateUser = async (userInfo : user) => {
 export const deleteUser = async (userId : string) =>{
   try {
     const response = await api.delete('manage/delete-user', {data: {userId}})
-    console.log(response);
+    return response.data
   } catch (error) {
-    console.log(error);
+    return error
   }
 }
