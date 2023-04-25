@@ -6,4 +6,5 @@ export interface loginInfo {
   name: string;
   phone: string;
   token: string;
+  error? : string
 }

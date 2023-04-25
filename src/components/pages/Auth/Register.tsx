@@ -6,9 +6,13 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { textHandle } from "../../shared/textHandle";
 import { infoSchema } from "../../shared/validateInput";
-
+import { useAppDispatch } from "../../../hooks";
+import { setAlert } from "../../alert/alert.slice";
+import { storeLoginInfo } from "../../shared/storeLoginInfo";
+import { userLogin } from "../../auth/auth.slice";
 
 const Login: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -24,18 +28,39 @@ const Login: React.FC = () => {
       phone: phone,
       address: address,
       dob: dob,
-      password: password,
+      password: password
     };
-  
+
     infoSchema
       .validate(userInfo)
-      .then((value) => {
-        console.log(value);
+      .then(async (value) => {
+        if(password !== confirmPassword)
+          dispatch(setAlert({open: true, isError: true, message: 'password and confirm password does not match'}))
+        else{
+          const userLoginInfo = await register(userInfo);
+          const errorMessage = userLoginInfo.response?.data || "";
+  
+          //update state in store after make a request
+          if (errorMessage !== "")
+            dispatch(
+              setAlert({ isError: true, open: true, message: errorMessage })
+            );
+          else {
+            storeLoginInfo(userLoginInfo);
+            dispatch(
+              setAlert({
+                isError: false,
+                open: true,
+                message: "register successfully",
+              })
+            );
+            dispatch(userLogin(userLoginInfo));
+          }
+        }
       })
       .catch((reason) => {
-        alert(reason)
+        dispatch(setAlert({ isError: true, open: true, message: reason.message }));
       });
-    // await register(userInfo)
   };
   return (
     <Container>

@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import setting from "../config/setting";
 import { user } from "../types/user";
-
-
+import { CustomAlert } from "../components/shared/CustomAlert";
+import { loginInfo } from "../types/loginInfo";
 const api = axios.create({
   baseURL : setting.baseApiUrl,
 })
@@ -22,19 +22,18 @@ export const login = async (userInfo: user) => {
       email: userInfo.email,
       password: userInfo.password,
     });
-    return response.data
+    return response.data 
   } catch (error: any) {
-    console.log(error);
-    
+    return error
   }
 };
 
 export const register = async (userInfo : user) =>{
     try {
-        const response = await api.post('auth/register', {userInfo})
-        console.log(response);
+        const response = await api.post('auth/register', userInfo)
+        return response.data
     } catch (error: any) {
-        alert('error')
+      return error
     }
 };
 

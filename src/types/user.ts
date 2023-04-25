@@ -7,5 +7,6 @@ export interface user {
     address?: string,
     admin? : boolean,
     dob? : string,
-    token? : string
+    token? : string,
+    errorMessage? : string
 }
