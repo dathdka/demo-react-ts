@@ -14,13 +14,15 @@ import { useState, useEffect } from "react";
 import { useAppDispatch } from "./hooks";
 import { useAppSelector } from "./hooks";
 import { CustomAlert } from "./components/shared/CustomAlert";
-// import { Dashboard } from "./components/pages/Dashboard/Dashboard";
+import  Dashboard  from "./components/pages/Dashboard/Dashboard";
+import { loginInfo } from "./types/loginInfo";
 function App() {
-  const token = window.localStorage.getItem('token')
+  const dispatch = useAppDispatch()
+  const userInfo = {...window.localStorage}
   // if(token)
     
 
-  const userInfo = useAppSelector(state => state.auth)
+  // const userInfo = useAppSelector(state => state.auth)
   useEffect(()=>{
 
   },
@@ -32,8 +34,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          {/* <Route path="/dashboard" element={<Dashboard/>} /> */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </Router>
     </>

@@ -2,11 +2,16 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { user as userState } from "../../types/user";
 import { manageUser } from "../../types/manageUser";
 import { RootState } from "../../redux/store";
+import _ from 'lodash'
+
 
 
 const initialState: manageUser = {
   userList: [],
-  currentPage: 0,
+  search : {
+    keyword : '',
+    currentPage : 0
+  }
 };
 
 const manageSlice = createSlice({
@@ -15,6 +20,7 @@ const manageSlice = createSlice({
   reducers: {
     loadUser: (state, action: PayloadAction<manageUser>) => {
       state.userList = [...action.payload.userList];
+      _.merge(state.search, action.payload.search)
     },
     //TODO: update the object has been update on server
     updateUser: (state, action: PayloadAction<userState>) => {
@@ -24,8 +30,8 @@ const manageSlice = createSlice({
     deleteUser: (state, action: PayloadAction<userState>) => {
       state.userList.push(action.payload);
     },
-    updateLazyloadPosition : (state, action: PayloadAction<userState> ) =>{
-        state.currentPage +=1
+    updateLazyloadPosition : (state, action: PayloadAction<manageUser> ) =>{
+      _.merge(state.search, action.payload.search)
     }
   },
 });
