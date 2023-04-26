@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import user from "../../database/model/user";
 import { authResponse } from "../../types/authResponse";
 import { signToken } from "../../util/signToken";
-import _ from 'lodash'
+import omit from 'lodash/omit'
 const prepareData = async (userInfo : user) => {
   userInfo.id = v4();
   userInfo.admin = userInfo.admin ? true : false
@@ -12,7 +12,7 @@ const prepareData = async (userInfo : user) => {
   return userInfo
 } 
 
-export const register: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const addUser: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     let userInfo: user = req.body;
     const isExsist = await user.query().findOne("email", userInfo.email);
@@ -22,10 +22,10 @@ export const register: RequestHandler = async (req: Request, res: Response, next
     
     await user.query().insert(userInfo);
 
-    let userRegister : authResponse = _.omit(userInfo,['password', 'admin'])
+    let userRegister : authResponse = omit(userInfo,['password', 'admin'])
     userRegister.token = signToken(userInfo);
 
-    return res.status(201).send("register successfully");
+    return res.status(201).send("add user successfully");
     
   } catch (error) {
     next(error)

@@ -15,7 +15,7 @@ POST http://localhost:1235/auth/login
 Content-Type: application/json
 
 {
-    "email" : "dathdka@gmail.com",
+    "email" : "da$^thdka@gmail.com",
     "password" : "123456789"
 }
 ###
@@ -27,7 +27,7 @@ DELETE  http://localhost:1235/manage/delete-user
 Content-Type: application/json
 
 {
-    "id" : "kjqjuhe27ye872t283y"
+    "id" : "%k"
 }
 ###
 PUT http://localhost:1236/manage/update-user

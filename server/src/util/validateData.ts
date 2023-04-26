@@ -19,3 +19,7 @@ export const userSchema = joi.object({
 export const deleteSchema = joi.object({
     id: joi.string().required()
 })
+
+export const validatePayload = (input : string) =>{
+    return input.replace('/[^a-zA-Z0-9@{}:]/g','')
+}

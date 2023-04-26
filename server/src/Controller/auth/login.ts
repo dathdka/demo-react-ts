@@ -3,9 +3,9 @@ import user from "../../database/model/user";
 import bcrypt from "bcrypt";
 import { signToken } from "../../util/signToken";
 import { authResponse } from "../../types/authResponse";
-import _ from "lodash";
+import omit from "lodash/omit";
 import "dotenv/config";
-
+import { validatePayload } from "../../util/validateData";
 
 
 export const login: RequestHandler = async (
@@ -14,7 +14,10 @@ export const login: RequestHandler = async (
   next: NextFunction
 ) => {
   try {
-    const { email, password } = req.body;
+    const validatedData = validatePayload(JSON.stringify(req.body))
+    console.log(JSON.parse(validatedData));
+    
+    const { email, password } = JSON.parse(validatedData)
     let account = await user.query().findOne("email", email);
 
     // check if email not exsist
@@ -25,7 +28,7 @@ export const login: RequestHandler = async (
     if (!isCorrectPassword)
       return res.status(400).send("incorrect email or password");
 
-    let userInfo : authResponse = _.omit(account,['password', 'admin'])
+    let userInfo : authResponse = omit(account,['password', 'admin'])
     userInfo.token = signToken(account);
 
 

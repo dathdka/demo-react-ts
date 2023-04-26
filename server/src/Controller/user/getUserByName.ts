@@ -8,7 +8,7 @@ export const getUser: Handler = async (req: Request, res: Response,   next : Nex
     const usersHaveName = await user
       .query()
       .where("name", "like", `%${username}%`)
-      .page(parseInt(currentPage), 40);
+      .page(parseInt(currentPage), 5);
     return res.status(200).json(usersHaveName);
   } catch (error) {
     next(error)
