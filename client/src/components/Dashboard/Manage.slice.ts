@@ -1,16 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { user as userState } from "../../types/user";
+import { user, user as userState } from "../../types/user";
 import { manageUser } from "../../types/manageUser";
 import { RootState } from "../../redux/store";
-import _ from 'lodash'
-
-
+import merge from 'lodash/merge'
+import { search } from "../../types/manageUser";
 
 const initialState: manageUser = {
   userList: [],
   search : {
     keyword : '',
-    currentPage : 0
+    currentPage : 1,
   }
 };
 
@@ -18,24 +17,20 @@ const manageSlice = createSlice({
   name: "manage",
   initialState,
   reducers: {
-    loadUser: (state, action: PayloadAction<manageUser>) => {
-      state.userList = [...action.payload.userList];
-      _.merge(state.search, action.payload.search)
+    initUserList: (state, action: PayloadAction<user[]>) => {
+      state.userList = [...action.payload]
     },
-    //TODO: update the object has been update on server
-    updateUser: (state, action: PayloadAction<userState>) => {
-      state.userList.push(action.payload);
+    retriveMoreUser: (state, action : PayloadAction<userState[]>) =>{
+      state.userList = [...state.userList, ...action.payload]
+      state.search.currentPage +=1
     },
-    //TODO: remove object out of array after delete on server
-    deleteUser: (state, action: PayloadAction<userState>) => {
-      state.userList.push(action.payload);
+    resetUserListBySearch : (state, action: PayloadAction<manageUser> ) =>{
+      state.userList = [...action.payload.userList]
+      merge(state.search, action.payload)
     },
-    updateLazyloadPosition : (state, action: PayloadAction<manageUser> ) =>{
-      _.merge(state.search, action.payload.search)
-    }
   },
 });
 
-export const {loadUser, updateUser, deleteUser, updateLazyloadPosition} = manageSlice.actions
-export const nanageStatus = (state : RootState) => state.manage
+export const {initUserList, retriveMoreUser,resetUserListBySearch} = manageSlice.actions
+export const manageStatus = (state : RootState) => state.manage
 export default manageSlice.reducer

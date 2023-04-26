@@ -11,7 +11,7 @@ import { setAlert } from "../../alert/alert.slice";
 import { storeLoginInfo } from "../../shared/storeLoginInfo";
 import { userLogin } from "../../auth/auth.slice";
 
-const Login: React.FC = () => {
+const AddUser: React.FC = () => {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -130,4 +130,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default AddUser;

@@ -1,9 +1,9 @@
 
 import { user } from "./user";
 
-interface search {
+export interface search {
   currentPage: number;
-  keyword : string
+  keyword : string;
 }
 
 export interface manageUser {

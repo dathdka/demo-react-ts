@@ -8,5 +8,4 @@ export interface user {
     admin? : boolean,
     dob? : string,
     token? : string,
-    errorMessage? : string
 }
