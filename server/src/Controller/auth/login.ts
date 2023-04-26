@@ -14,10 +14,9 @@ export const login: RequestHandler = async (
   next: NextFunction
 ) => {
   try {
-    const validatedData = validatePayload(JSON.stringify(req.body))
-    console.log(JSON.parse(validatedData));
+
     
-    const { email, password } = JSON.parse(validatedData)
+    const { email, password } = req.body
     let account = await user.query().findOne("email", email);
 
     // check if email not exsist
