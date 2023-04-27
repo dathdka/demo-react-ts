@@ -5,14 +5,24 @@ export const loginSchema = joi.object({
     password: joi.string().required().min(6).max(20)
 })
 
-export const userSchema = joi.object({
+export const insertSchema = joi.object({
     id: joi.string(),
     name: joi.string().min(8).max(40),
     email : joi.string().email().required().min(10).max(40),
-    phone : joi.number().required().min(9).max(12),
+    phone : joi.string().required().min(9).max(12),
     address: joi.string().required().min(10).max(40),
-    dob: joi.date().required(),
+    dob: joi.string().required(),
     password: joi.string().required().min(6).max(20),
+    admin : joi.boolean()
+})
+
+export const updateSchema = joi.object({
+    id: joi.string(),
+    name: joi.string().min(8).max(40),
+    email : joi.string().email().required().min(10).max(40),
+    phone : joi.string().required().min(9).max(12),
+    address: joi.string().required().min(10).max(40),
+    dob: joi.string().required(),
     admin : joi.boolean()
 })
 
@@ -21,5 +31,5 @@ export const deleteSchema = joi.object({
 })
 
 export const validatePayload = (input : string) =>{
-    return input.replace('/[^a-zA-Z0-9@{}:]/g','')
+    return input.toString().replace('/[^a-zA-Z0-9@]/gi','')
 }

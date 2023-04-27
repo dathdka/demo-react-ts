@@ -3,7 +3,7 @@ import user from "../../database/model/user";
 import bcrypt from "bcrypt";
 import { signToken } from "../../util/signToken";
 import { authResponse } from "../../types/authResponse";
-import omit from "lodash/omit";
+import {omit} from "lodash";
 import "dotenv/config";
 import { validatePayload } from "../../util/validateData";
 
@@ -27,7 +27,7 @@ export const login: RequestHandler = async (
     if (!isCorrectPassword)
       return res.status(400).send("incorrect email or password");
 
-    let userInfo : authResponse = omit(account,['password', 'admin'])
+    let userInfo : authResponse = omit(account,['password'])
     userInfo.token = signToken(account);
 
 
