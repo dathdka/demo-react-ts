@@ -19,6 +19,7 @@ export const getLoginInfo = () : user =>{
         phone : window.localStorage.getItem('phone') || '',
         dob: window.localStorage.getItem('dob') || '',
         token : window.localStorage.getItem('token') || '',
+        admin : window.localStorage.getItem('admin') === 'true' && true,
         address : window.localStorage.getItem('address') || ''
     }
     return userLoginInfo

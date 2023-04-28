@@ -6,25 +6,28 @@ import {
   retriveMoreUser,
   resetUserListBySearch,
 } from "../../Dashboard/Manage.slice";
+import DoneIcon from "@mui/icons-material/Done";
 import { setAlert } from "../../alert/alert.slice";
 import { getUserByName } from "../../../services/api";
 import { user } from "../../../types/user";
-import { Button, Col, Row, Container } from "react-bootstrap";
-import Card from "react-bootstrap/Card";
+import {Container } from "react-bootstrap";
 import LazyLoad from "react-lazy-load";
 import { manageUser } from "../../../types/manageUser";
 import { deleteUser } from "../../../services/api";
-
+import Table from "react-bootstrap/Table";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import DeleteIcon from "@mui/icons-material/Delete";
 class DashBoard extends React.Component {
-  static currentPosition: number = 0;
-  constructor(props: any) {
-    super(props);
-  }
+  static relativeError : number = 10
+
 
   lazyFetchUserList = async () => {
     const { dashboardState, alert } = this.props as any;
     const currentScrollPos = window.pageYOffset;
-    if (currentScrollPos - dashboardState.search.currentPos > 150) {
+    const curPos = DashBoard.relativeError * dashboardState.search.currentPage * 40
+    
+    if (currentScrollPos - curPos > curPos) {
+      window.removeEventListener('scroll', this.lazyFetchUserList)
       const response = await getUserByName(
         dashboardState.search.keyword,
         dashboardState.search.currentPage
@@ -39,10 +42,10 @@ class DashBoard extends React.Component {
           search: {
             keyword: dashboardState.search.keyword,
             currentPage: dashboardState.search.currentPage + 1,
-            currentPos: currentScrollPos,
           },
         };
         retriveMoreUser(dataUpdateState);
+        window.addEventListener('scroll', this.lazyFetchUserList)
       }
     }
   };
@@ -62,9 +65,9 @@ class DashBoard extends React.Component {
     }
   }
 
-  updateHandle(userInfo : user) {
-    window.localStorage.setItem('updateUser', JSON.stringify(userInfo))
-    window.location.pathname = '/update-user'
+  updateHandle(userInfo: user) {
+    window.localStorage.setItem("updateUser", JSON.stringify(userInfo));
+    window.location.pathname = "/update-user";
   }
 
   deleteHandle = async (userId: string) => {
@@ -85,38 +88,65 @@ class DashBoard extends React.Component {
   }
   render(): React.ReactNode {
     const { dashboardState, authState } = this.props as any;
+    const isAdmin = authState.admin
     const userList = dashboardState.userList as user[];
     return (
       <Container>
-        <LazyLoad height={300}>
-          <Row style={{ margin: "48px" }}>
-            {userList.map((el) => (
-              <Col className="col-lg-5" style={{ margin: "48px" }}>
-                <Card style={{ borderColor : el.admin ? 'red': 'black'}} >
-                  <Card.Body>
-                    <Card.Title>{el.email}</Card.Title>
-                    <Card.Text>Name: {el.name}</Card.Text>
-                    <Card.Text>Phone number: {el.phone}</Card.Text>
-                    <Card.Text>Date of Birth: {el.dob}</Card.Text>
-                    <Card.Text>Address: {el.address}</Card.Text>
-                    <Button
-                      variant="primary"
-                      onClick={()=>this.updateHandle(el)}
+        <LazyLoad height={"80vh"}>
+          <Table responsive>
+            <thead>
+              <tr>
+                <th>Avatar</th>
+                {isAdmin &&<th>Email</th>}
+                <th>Full name</th>
+                {isAdmin &&<th>Phone number</th>}
+                <th>Address</th>
+                {isAdmin &&<th>DoB</th>}
+                {isAdmin &&<th>Admin</th>}
+                {isAdmin &&<th>Update</th>}
+              </tr>
+            </thead>
+
+            <tbody>
+              {userList.map((el) => (
+                <tr key={el.id}>
+                  <td>
+                    <img src={el.image} width={80} alt="User Avatar" />
+                  </td>
+                  {isAdmin &&<td>{el.email}</td>}
+                  <td>{el.name}</td>
+                  {isAdmin &&<td>{el.phone}</td>}
+                  <td>{el.address}</td>
+                  {isAdmin &&<td>{el.dob?.slice(0, 10)}</td>}
+                  {isAdmin &&<td>{el.admin && <DoneIcon />}</td>}
+                  {isAdmin &&<td>
+                    <button
+                      style={{
+                        border: "none",
+                        backgroundColor: "green",
+                        borderRadius: "4px",
+                      }}
+                      onClick={() => this.updateHandle(el)}
                     >
-                      Update
-                    </Button>
-                    <Button
-                      variant="danger"
+                      <ModeEditIcon />
+                    </button>
+                    <button
+                      style={{
+                        border: "none",
+                        backgroundColor: "red",
+                        borderRadius: "4px",
+                      }}
                       onClick={() => this.deleteHandle(el.id as string)}
                     >
-                      Delete
-                    </Button>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
+                      <DeleteIcon />
+                    </button>
+                  </td>}
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         </LazyLoad>
+
       </Container>
     );
   }

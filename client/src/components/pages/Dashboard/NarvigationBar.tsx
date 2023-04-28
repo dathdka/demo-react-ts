@@ -17,6 +17,9 @@ import {
 import { setAlert } from "../../alert/alert.slice";
 import { getUserByName } from "../../../services/api";
 import { userLogout } from "../../auth/auth.slice";
+import PersonPinIcon from '@mui/icons-material/PersonPin';
+import HomeIcon from '@mui/icons-material/Home';
+import AddIcon from '@mui/icons-material/Add';
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -69,6 +72,7 @@ const dashboardRedirect = () => (window.location.pathname = "/");
 export const NarvigationBar: React.FC = () => {
   const ditpatch = useAppDispatch();
   const dashboardState = useAppSelector((state) => state.manage);
+  const authState = useAppSelector((state) => state.auth)
   const logoutHandle = () => {
     removeLoginInfo();
     ditpatch(userLogout());
@@ -92,35 +96,36 @@ export const NarvigationBar: React.FC = () => {
       resetUserListBySearch({
         keyword: event.target.value,
         currentPage: 1,
-        currentPos: 0,
       })
     );
   };
+
+  
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Button
+          {authState.admin&&<Button
             variant="outlined"
-            style={{ color: "white" }}
+            style={{color : window.location.pathname === '/add-user' ? 'black': 'white'}}
             onClick={addUserRedirect}
           >
-            Add new user
-          </Button>
+            <AddIcon />
+          </Button>}
           <Button
             variant="outlined"
-            style={{ color: "white" }}
+            style={{color : window.location.pathname === '/update-user' ? 'black': 'white'}}
             onClick={updateInfoRedirect}
           >
-            Update my Infomation
+            <PersonPinIcon />
           </Button>
           <Button
             variant="outlined"
             style={{ color: "white" }}
             onClick={dashboardRedirect}
           >
-            Dashboard
+            <HomeIcon style={{color : window.location.pathname === '/dashboard' ? 'black': 'white'}} />
           </Button>
           <Button
             variant="outlined"

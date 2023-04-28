@@ -5,6 +5,7 @@ export interface user {
     phone?: string;
     address?: string;
     dob?: string;
+    image? : string;
     admin? : boolean;
     token?: string;
     password? : string;

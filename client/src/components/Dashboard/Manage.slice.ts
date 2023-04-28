@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { user, user as userState } from "../../types/user";
+import { user } from "../../types/user";
 import { manageUser } from "../../types/manageUser";
 import { RootState } from "../../redux/store";
 import merge from 'lodash/merge'
@@ -10,7 +10,6 @@ const initialState: manageUser = {
   search : {
     keyword : '',
     currentPage : 1,
-    currentPos : 0
   }
 };
 
