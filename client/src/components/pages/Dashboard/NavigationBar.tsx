@@ -69,7 +69,7 @@ const updateInfoRedirect = () => {
 };
 const dashboardRedirect = () => (window.location.pathname = "/");
 
-export const NarvigationBar: React.FC = () => {
+export const NavigationBar: React.FC = () => {
   const ditpatch = useAppDispatch();
   const dashboardState = useAppSelector((state) => state.manage);
   const authState = useAppSelector((state) => state.auth)
@@ -104,7 +104,7 @@ export const NarvigationBar: React.FC = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           {authState.admin&&<Button
             variant="outlined"

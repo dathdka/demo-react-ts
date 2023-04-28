@@ -13,7 +13,7 @@ import { CustomAlert } from "./components/shared/CustomAlert";
 import Dashboard from "./components/pages/Dashboard/Dashboard";
 import { userLogin } from "./components/auth/auth.slice";
 import { getLoginInfo } from "./components/shared/storeLoginInfo";
-import { NarvigationBar } from "./components/pages/Dashboard/NarvigationBar";
+import { NavigationBar } from "./components/pages/Dashboard/NavigationBar";
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const dispatch = useAppDispatch();
@@ -29,7 +29,7 @@ function App() {
   return (
     <>
       <Router>
-      {isLogin && <NarvigationBar />} 
+      {isLogin && <NavigationBar />} 
       <CustomAlert />
         <Routes>
           <Route path="/login" element={<Login />} />
