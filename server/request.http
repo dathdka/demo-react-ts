@@ -1,9 +1,9 @@
-POST http://localhost:1235/auth/register
+POST http://localhost:1235/manage/add-user
 Content-Type: application/json
 
 {
     "name" : "Hoang Dat",
-    "email" : "dathdka7@gmail.com",
+    "email" : "dathdka@gmail.com",
     "phone" : "0327227902",
     "address" : "Ha Tinh Ha Tinh Ha Tinh Ha Tinh",
     "dob" : "1999/09/22",

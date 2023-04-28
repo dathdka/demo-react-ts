@@ -1,18 +1,18 @@
-require('dotenv').config()
+require('dotenv').config({path: '../.env'})
 module.exports = {
 
   development: {
     client: 'pg',
     connection: {
       port : 5432,
-      user : `${process.env.DB_USERNAME}`,
-      host : `${process.env.DB_HOST}`,
-      password : `${process.env.DB_PASSWORD}`,
-      database : `${process.env.DB_NAME}`,
+      user : 'postgres',
+      host : `127.0.0.1`,
+      password : `1234@Tps229`,
+      database : `demo`,
     },
     migrations: {
       directory: "./migrations"
-    }
+    },
   }
 
 };

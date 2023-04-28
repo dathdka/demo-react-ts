@@ -9,6 +9,7 @@ exports.up = function (knex) {
         table.string("password")
         table.string("address")
         table.string("dob")
+        table.string('image')
         table.boolean("admin")
     })
 }
