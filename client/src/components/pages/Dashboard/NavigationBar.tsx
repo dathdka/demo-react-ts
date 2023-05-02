@@ -70,29 +70,29 @@ const updateInfoRedirect = () => {
 const dashboardRedirect = () => (window.location.pathname = "/");
 
 export const NavigationBar: React.FC = () => {
-  const ditpatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const dashboardState = useAppSelector((state) => state.manage);
   const authState = useAppSelector((state) => state.auth)
   const logoutHandle = () => {
     removeLoginInfo();
-    ditpatch(userLogout());
+    dispatch(userLogout());
     window.location.pathname = "/";
   };
 
-  //fetch data every search input change
+  //fetch data every time search input change
   useEffect(() => {
-    getUserByName(dashboardState.search.keyword, 0).then((response) => {
+    getUserByName(dashboardState.search.keyword, 0,dashboardState.filter?.isAdmin, dashboardState.filter?.addressKey).then((response) => {
       const errorMessage = response.response?.data || "";
       if (errorMessage !== "")
-        setAlert({ isError: true, open: true, message: errorMessage });
+        dispatch(setAlert({ isError: true, open: true, message: errorMessage }));
       else {
-        ditpatch(initUserList(response.results));
+        dispatch(initUserList(response.results));
       }
     });
   }, [dashboardState.search.keyword]);
 
   const searchHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    ditpatch(
+    dispatch(
       resetUserListBySearch({
         keyword: event.target.value,
         currentPage: 1,

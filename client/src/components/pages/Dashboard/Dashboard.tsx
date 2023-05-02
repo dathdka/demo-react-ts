@@ -10,7 +10,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import { setAlert } from "../../alert/alert.slice";
 import { getUserByName } from "../../../services/api";
 import { user } from "../../../types/user";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container} from "react-bootstrap";
 import LazyLoad from "react-lazy-load";
 import { manageUser } from "../../../types/manageUser";
 import { deleteUser } from "../../../services/api";
@@ -31,7 +31,9 @@ class DashBoard extends React.Component {
       window.removeEventListener("scroll", this.lazyFetchUserList);
       const response = await getUserByName(
         dashboardState.search.keyword,
-        dashboardState.search.currentPage
+        dashboardState.search.currentPage,
+        dashboardState.filter.isAdmin,
+        dashboardState.filter.addressKey
       );
       const errorMessage = response.response?.data || "";
       if (errorMessage !== "")
@@ -43,7 +45,7 @@ class DashBoard extends React.Component {
           search: {
             keyword: dashboardState.search.keyword,
             currentPage: dashboardState.search.currentPage + 1,
-          },
+          }
         };
         retriveMoreUser(dataUpdateState);
         window.addEventListener("scroll", this.lazyFetchUserList);

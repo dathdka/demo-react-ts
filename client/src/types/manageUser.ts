@@ -6,7 +6,13 @@ export interface search {
   keyword : string;
 }
 
+export interface filter {
+  addressKey : string;
+  isAdmin : string;
+}
+
 export interface manageUser {
     userList: user[];
-    search : search
+    search : search;
+    filter? : filter;
   }
