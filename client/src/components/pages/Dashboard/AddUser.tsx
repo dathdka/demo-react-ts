@@ -64,7 +64,7 @@ const AddUser: React.FC = () => {
       });
   };
   return (
-    <Container>
+    <Container style={{marginTop: '100px'}}>
       <h1 style={{ textAlign: "center"}}>Add new user</h1>
       <Form>
         <Form.Group className="mb-3">

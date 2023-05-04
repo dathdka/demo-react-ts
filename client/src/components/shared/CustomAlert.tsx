@@ -27,8 +27,8 @@ export const CustomAlert: React.FC<errorAlert> = () => {
   return (
     <>
       {open ? (
-        <Stack sx={{ width: "100%" }}>
-          <Alert style={{position: 'fixed'}} severity={isError ? "error" : "success"}>{message}</Alert>
+        <Stack sx={{ width: "100%", position: 'fixed', alignItems : 'end'}}>
+          <Alert severity={isError ? "error" : "success"}>{message}</Alert>
         </Stack>
       ) : (
         <></>

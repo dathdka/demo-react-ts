@@ -23,14 +23,13 @@ function App() {
 
   const userInfo = useAppSelector((state) => state.auth);
   useEffect(() => {
-    if (userInfo.token != "") setIsLogin(true);
+    if (userInfo.token !== "") setIsLogin(true);
   }, [userInfo.token]);
 
   return (
     <>
       <Router>
-      {isLogin && <NavigationBar />} 
-      <CustomAlert />
+        {isLogin && <NavigationBar />}
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/add-user" element={isLogin ? <AddUser /> : <Login />} />
@@ -44,6 +43,7 @@ function App() {
           />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
+        <CustomAlert />
       </Router>
     </>
   );
