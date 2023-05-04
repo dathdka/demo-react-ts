@@ -10,7 +10,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import { setAlert } from "../../alert/alert.slice";
 import { getUserByName } from "../../../services/api";
 import { user } from "../../../types/user";
-import { Container} from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import LazyLoad from "react-lazy-load";
 import { manageUser } from "../../../types/manageUser";
 import { deleteUser } from "../../../services/api";
@@ -18,11 +18,19 @@ import Table from "react-bootstrap/Table";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Filter } from "../../shared/Filter";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 class DashBoard extends React.Component {
   static relativeError: number = 10;
 
+  constructor(props: any) {
+    super(props);
+    this.state = { isSortAsc: true };
+  }
+
   lazyFetchUserList = async () => {
     const { dashboardState, alert } = this.props as any;
+    const localState = this.state as any
     const currentScrollPos = window.pageYOffset;
     const curPos =
       DashBoard.relativeError * dashboardState.search.currentPage * 40;
@@ -33,20 +41,22 @@ class DashBoard extends React.Component {
         dashboardState.search.keyword,
         dashboardState.search.currentPage,
         dashboardState.filter.isAdmin,
-        dashboardState.filter.addressKey
+        dashboardState.filter.addressKey,
+        localState.isSortAsc
       );
       //notification error if any
       const errorMessage = response.response?.data || "";
       if (errorMessage !== "")
         alert({ isError: true, open: true, message: errorMessage });
       else {
+        //update store after fetch api
         const { retriveMoreUser } = this.props as any;
         const dataUpdateState: manageUser = {
           userList: response.results as user[],
           search: {
             keyword: dashboardState.search.keyword,
             currentPage: dashboardState.search.currentPage + 1,
-          }
+          },
         };
         retriveMoreUser(dataUpdateState);
         window.addEventListener("scroll", this.lazyFetchUserList);
@@ -66,6 +76,35 @@ class DashBoard extends React.Component {
       const { initUserList } = this.props as any;
       const actionPayload: user[] = response.results;
       initUserList(actionPayload);
+    }
+  }
+
+  async componentDidUpdate(
+    prevProps: Readonly<{}>,
+    prevState: Readonly<{ isSortAsc: boolean }>,
+    snapshot?: any
+  ): Promise<void> {
+    const curState = this.state as any;
+    if (curState.isSortAsc !== prevState.isSortAsc) {
+      const { alert } = this.props as any;
+      const {resetUserListBySearch} = this.props as any
+      const { dashboardState } = this.props as any;
+      const response = await getUserByName(
+        "",
+        0,
+        dashboardState.filter.isAdmin,
+        dashboardState.filter.addressKey,
+        curState.isSortAsc
+      );
+      const errorMessage = response.response?.data || "";
+      if (errorMessage !== "")
+        alert({ isError: true, open: true, message: errorMessage });
+      else {
+        const { initUserList } = this.props as any;
+        const actionPayload: user[] = response.results;
+        resetUserListBySearch({keyword: '', currentPage : 0})
+        initUserList(actionPayload);
+      }
     }
   }
 
@@ -96,17 +135,29 @@ class DashBoard extends React.Component {
     const { dashboardState, authState } = this.props as any;
     const isAdmin = authState.admin;
     const userList = dashboardState.userList as user[];
+    const localState = this.state as any;
     return (
       <div>
         <Filter />
-        <Container style={{ paddingTop: "50px" }}>
+        <Container style={{ paddingTop: "120px" }}>
           <LazyLoad height={"80vh"}>
             <Table responsive>
               <thead>
                 <tr>
                   <th>Avatar</th>
                   {isAdmin && <th>Email</th>}
-                  <th>Full name</th>
+                  <th>
+                    Full name
+                    {localState.isSortAsc ? (
+                      <a onClick={() => this.setState({ isSortAsc: false })}>
+                        <ArrowDropDownIcon />
+                      </a>
+                    ) : (
+                      <a onClick={() => this.setState({ isSortAsc: true })}>
+                        <ArrowDropUpIcon />
+                      </a>
+                    )}
+                  </th>
                   {isAdmin && <th>Phone number</th>}
                   <th>Address</th>
                   {isAdmin && <th>DoB</th>}

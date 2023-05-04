@@ -36,11 +36,12 @@ export const getUserByName = async (
   username: string = "",
   currentPage: number = 0,
   isAdmin: string = "",
-  addressKey: string = ""
+  addressKey: string = "",
+  isSortAsc: boolean = true
 ) => {
   try {
     const response = await api.get(
-      `manage/user?username=${username}&currentPage=${currentPage}&isAdmin=${isAdmin}&addressKey=${addressKey}`
+      `manage/user?username=${username}&currentPage=${currentPage}&isAdmin=${isAdmin}&addressKey=${addressKey}&isSortAsc=${isSortAsc}`
     );
     return response.data;
   } catch (error: any) {

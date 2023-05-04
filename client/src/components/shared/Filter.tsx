@@ -1,29 +1,27 @@
-import { Container, Row, Form, Button } from "react-bootstrap";
-import { useState } from "react";
+import { Container, Row, Form } from "react-bootstrap";
+import { useEffect, useState, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { getUserByName } from "../../services/api";
 import { resetUserListByFilter, initUserList } from "../Dashboard/Manage.slice";
 import { setAlert } from "../alert/alert.slice";
 import { user } from "../../types/user";
+import { debounce } from "lodash";
 export const Filter: React.FC = () => {
   const [addressKey, setAddressKey] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [isUser, setIsUSer] = useState(false);
   const dispatch = useAppDispatch();
   const dashboardState = useAppSelector((state) => state.manage);
+  const authState = useAppSelector((state) => state.auth)
 
-  const filterHandle = async () => {
+
+  const filterHandle = async (addressKey : string, isAdmin: boolean, isUser : boolean, searchKeyword: string) => {
+    
     let adminCheck;
     if (isAdmin === isUser) adminCheck = "";
     else adminCheck = isAdmin ? true : false;
 
-    const response = await getUserByName(
-      dashboardState.search.keyword,
-      0,
-      adminCheck.toString(),
-      addressKey
-    );
+    const response = await getUserByName(searchKeyword,0,adminCheck.toString(),addressKey);
 
     //error response handle
     const errorMessage = response.response?.data || "";
@@ -35,16 +33,19 @@ export const Filter: React.FC = () => {
       dispatch(resetUserListByFilter({ isAdmin: `${adminCheck}`, addressKey }));
     }
   };
+  const debounceInput = useCallback(debounce(filterHandle, 1000), [])
+  useEffect(()=>{debounceInput(addressKey, isAdmin, isUser, dashboardState.search.keyword)},[isAdmin, isUser,addressKey])
+
   return (
-    <Container>
-      <Row style={{ marginTop: "70px" }}>
+    // <Container >
+      <Row style={{ marginTop: "64px",position: "fixed", width: '100vw', alignItems : 'end'}}>
         <Form>
           <Form.Group
             className="mb-3"
             style={{
-              position: "fixed",
               display: "flex",
               backgroundColor: "white",
+              justifyContent: 'space-around'
             }}
             controlId="formBasicEmail"
           >
@@ -55,25 +56,22 @@ export const Filter: React.FC = () => {
               onChange={(e) => setAddressKey(e.target.value)}
             />
             <div style={{ display: "flex" }}>
-              <Form.Check
+              {authState.admin&&<Form.Check
                 style={{ margin: "10px" }}
                 type="checkbox"
                 label="Admin"
                 onChange={(e) => setIsAdmin(e.target.checked)}
-              />
-              <Form.Check
+              />}
+              {authState.admin&&<Form.Check
                 style={{ margin: "10px" }}
                 type="checkbox"
                 label="User"
                 onChange={(e) => setIsUSer(e.target.checked)}
-              />
-              <Button variant="success" onClick={filterHandle}>
-                <FilterAltIcon />
-              </Button>
+              />}
             </div>
           </Form.Group>
         </Form>
       </Row>
-    </Container>
+    // </Container>
   );
 };
