@@ -11,8 +11,12 @@ export const getUser: Handler = async (
     const currentPage = req.query.currentPage as string;
     const isAdmin = req.query.isAdmin as string;
     const addressKey = req.query.addressKey;
+    const isAsc = req.query.isAsc
     let adminCheck =
       isAdmin === "true" ? true : isAdmin === "false" ? false : null;
+
+    const sortBy = isAsc === 'false' ? 'desc' :'asc' 
+    
 
     const usersHaveName = await user
       .query()
@@ -32,7 +36,7 @@ export const getUser: Handler = async (
         "like",
         `%${addressKey?.toString().toLowerCase()}%`
       )
-      .orderBy("name")
+      .orderBy("name",sortBy)
       .page(parseInt(currentPage), 15);
     return res.status(200).json(usersHaveName);
   } catch (error) {

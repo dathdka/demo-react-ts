@@ -1,6 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import user from "../../database/model/user";
-import { Model } from "objection";
+import { omit } from "lodash";
+
 export const updateUser: RequestHandler = async (
   req: Request,
   res: Response,
@@ -8,9 +9,12 @@ export const updateUser: RequestHandler = async (
 ) => {
   try {
     const updateUser: user = req.body;
-    
+  
     await user.query().findById(updateUser.id).patch(updateUser).forUpdate()
-    return res.status(200).send("update user successfully");
+
+    const userJustUpdated = await user.query().findById(updateUser.id)
+
+    return res.status(200).json({result : omit(userJustUpdated, ['password'])});
     
   } catch (error) {
     next(error)
