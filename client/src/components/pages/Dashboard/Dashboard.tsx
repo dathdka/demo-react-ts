@@ -35,6 +35,7 @@ class DashBoard extends React.Component {
         dashboardState.filter.isAdmin,
         dashboardState.filter.addressKey
       );
+      //notification error if any
       const errorMessage = response.response?.data || "";
       if (errorMessage !== "")
         alert({ isError: true, open: true, message: errorMessage });

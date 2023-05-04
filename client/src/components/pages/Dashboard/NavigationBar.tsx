@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -17,10 +17,10 @@ import {
 import { setAlert } from "../../alert/alert.slice";
 import { getUserByName } from "../../../services/api";
 import { userLogout } from "../../auth/auth.slice";
-import PersonPinIcon from '@mui/icons-material/PersonPin';
-import HomeIcon from '@mui/icons-material/Home';
-import AddIcon from '@mui/icons-material/Add';
-
+import PersonPinIcon from "@mui/icons-material/PersonPin";
+import HomeIcon from "@mui/icons-material/Home";
+import AddIcon from "@mui/icons-material/Add";
+import { debounce } from "lodash";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -72,7 +72,7 @@ const dashboardRedirect = () => (window.location.pathname = "/");
 export const NavigationBar: React.FC = () => {
   const dispatch = useAppDispatch();
   const dashboardState = useAppSelector((state) => state.manage);
-  const authState = useAppSelector((state) => state.auth)
+  const authState = useAppSelector((state) => state.auth);
   const logoutHandle = () => {
     removeLoginInfo();
     dispatch(userLogout());
@@ -81,41 +81,62 @@ export const NavigationBar: React.FC = () => {
 
   //fetch data every time search input change
   useEffect(() => {
-    getUserByName(dashboardState.search.keyword, 0,dashboardState.filter?.isAdmin, dashboardState.filter?.addressKey).then((response) => {
+    getUserByName(
+      dashboardState.search.keyword,
+      0,
+      dashboardState.filter?.isAdmin,
+      dashboardState.filter?.addressKey
+    ).then((response) => {
       const errorMessage = response.response?.data || "";
       if (errorMessage !== "")
-        dispatch(setAlert({ isError: true, open: true, message: errorMessage }));
+        dispatch(
+          setAlert({ isError: true, open: true, message: errorMessage })
+        );
       else {
         dispatch(initUserList(response.results));
       }
     });
   }, [dashboardState.search.keyword]);
 
-  const searchHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(
-      resetUserListBySearch({
-        keyword: event.target.value,
-        currentPage: 1,
-      })
-    );
-  };
+  const debounceSearch = useCallback(
+    debounce((input: string) => {
+      dispatch(
+        resetUserListBySearch({
+          keyword: input,
+          currentPage: 1,
+        })
+      );
+    }, 1000),
+    []
+  );
 
-  
+  const searchHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const input = event.target.value as string;
+    debounceSearch(input);
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
         <Toolbar>
-          {authState.admin&&<Button
-            variant="outlined"
-            style={{color : window.location.pathname === '/add-user' ? 'black': 'white'}}
-            onClick={addUserRedirect}
-          >
-            <AddIcon />
-          </Button>}
+          {authState.admin && (
+            <Button
+              variant="outlined"
+              style={{
+                color:
+                  window.location.pathname === "/add-user" ? "black" : "white",
+              }}
+              onClick={addUserRedirect}
+            >
+              <AddIcon />
+            </Button>
+          )}
           <Button
             variant="outlined"
-            style={{color : window.location.pathname === '/update-user' ? 'black': 'white'}}
+            style={{
+              color:
+                window.location.pathname === "/update-user" ? "black" : "white",
+            }}
             onClick={updateInfoRedirect}
           >
             <PersonPinIcon />
@@ -125,7 +146,12 @@ export const NavigationBar: React.FC = () => {
             style={{ color: "white" }}
             onClick={dashboardRedirect}
           >
-            <HomeIcon style={{color : window.location.pathname === '/dashboard' ? 'black': 'white'}} />
+            <HomeIcon
+              style={{
+                color:
+                  window.location.pathname === "/dashboard" ? "black" : "white",
+              }}
+            />
           </Button>
           <Button
             variant="outlined"
