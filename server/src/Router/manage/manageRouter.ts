@@ -9,6 +9,7 @@ const validator = JoiValidator.createValidator()
 const manageRouter = express.Router()
 
 manageRouter.get('/user',userController.getUser)
+manageRouter.get('/info', userController.getUserById)
 manageRouter.post('/add-user' ,validator.body(insertSchema),authMiddleware,userController.addUser)
 manageRouter.delete('/delete-user',validator.body(deleteSchema),authMiddleware,userController.deleteUser)
 manageRouter.put('/update-user',validator.body(updateSchema),authMiddleware,userController.updateUser)

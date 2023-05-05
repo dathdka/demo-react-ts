@@ -1,5 +1,4 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
-import { Model } from "objection";
 import user from "../../database/model/user";
 
 export const deleteUser: RequestHandler = async (

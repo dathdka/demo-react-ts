@@ -11,13 +11,12 @@ export const getUser: Handler = async (
     const currentPage = req.query.currentPage as string;
     const isAdmin = req.query.isAdmin as string;
     const addressKey = req.query.addressKey;
-    const isAsc = req.query.isAsc
+    const isSortAsc = req.query.isSortAsc
     let adminCheck =
       isAdmin === "true" ? true : isAdmin === "false" ? false : null;
 
-    const sortBy = isAsc === 'false' ? 'desc' :'asc' 
+    const sortBy = isSortAsc === 'false' ? 'desc' :'asc' 
     
-
     const usersHaveName = await user
       .query()
       .where(
