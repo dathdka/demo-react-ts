@@ -115,9 +115,13 @@ const AddUser: React.FC = () => {
           />
         </Form.Group>
 
-        <Button variant="primary" onClick={insertHandle}>
-          Submit
-        </Button>
+        <Button
+            variant="primary"
+            onClick={(e) => {e.preventDefault(); insertHandle()} }
+            type="submit"
+          >
+            Submit
+          </Button>
       </Form>
     </Container>
   );

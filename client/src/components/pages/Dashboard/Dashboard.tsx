@@ -20,7 +20,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Filter } from "../../shared/Filter";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import { URLSearchParams } from "url";
 class DashBoard extends React.Component {
   static relativeError: number = 10;
 
@@ -70,7 +69,7 @@ class DashBoard extends React.Component {
     window.addEventListener("scroll", this.lazyFetchUserList);
 
     console.log('componentDidMount');
-    
+
     const response = await getUserByName("", 0);
 
     if (typeof response === 'string' )
@@ -106,8 +105,8 @@ class DashBoard extends React.Component {
     }
   }
 
-  filterHandle = async () => {};
 
+  filterHandle = async () => {};
   updateHandle(userInfo: user) {
     window.localStorage.setItem("updateUser", JSON.stringify(userInfo));
     window.location.pathname = "/update-user";
@@ -147,7 +146,7 @@ class DashBoard extends React.Component {
         <Filter />
         <Container >
           <LazyLoad height={"80vh"}>
-            <Table style={{marginTop : '20px'}} responsive>
+            <Table className="dashboard-table" responsive>
               <thead>
                 <tr>
                   <th>Avatar</th>
@@ -203,7 +202,6 @@ class DashBoard extends React.Component {
                           onClick={()=>this.redirectToInfoPage(el.id as string)}
                          >
                           <VisibilityIcon/>
-
                         </Button>
                       </td>
                     )}
