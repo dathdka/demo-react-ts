@@ -87,12 +87,10 @@ export const NavigationBar: React.FC = () => {
       dashboardState.filter?.isAdmin,
       dashboardState.filter?.addressKey
     ).then((response) => {
-      const errorMessage = response.response?.data || "";
-      if (errorMessage !== "")
-        dispatch(
-          setAlert({ isError: true, open: true, message: errorMessage })
-        );
+      if (typeof response === "string")
+        dispatch(setAlert({ isError: true, open: true, message: response }));
       else {
+        dispatch(resetUserListBySearch({keyword: dashboardState.search.keyword, currentPage : 1}))
         dispatch(initUserList(response.results));
       }
     });

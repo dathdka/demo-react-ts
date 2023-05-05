@@ -8,8 +8,7 @@ import { textHandle } from "../../shared/textHandle";
 import { insertSchema } from "../../shared/validateInput";
 import { useAppDispatch } from "../../../hooks";
 import { setAlert } from "../../alert/alert.slice";
-import { storeLoginInfo } from "../../shared/storeLoginInfo";
-import { userLogin } from "../../auth/auth.slice";
+
 const AddUser: React.FC = () => {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
@@ -18,54 +17,40 @@ const AddUser: React.FC = () => {
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
   const [dob, setDoB] = useState("1999-01-01");
-  const [admin, setAdmin] = useState(false)
+  const [admin, setAdmin] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const registerHandle = async () => {
+
+  const insertHandle = async () => {
     let userInfo: user = {
       name: name,
       email: email,
       phone: phone,
       address: address,
       dob: dob,
-      admin : admin,
-      password: password
+      admin: admin,
+      password: password,
     };
+    try {
+      await insertSchema.validate(userInfo)
+      if (password !== confirmPassword)
+        dispatch(setAlert({message : "password doesn't match", isError : true, open : true}))
+      const userLoginInfo = await insertUser(userInfo)
+      //if the response is error then set alert
+      if (typeof userLoginInfo === 'string' )
+        dispatch(setAlert({message : userLoginInfo, isError : true, open : true}))
+      else {
+        window.location.pathname = "/dashboard";
+        dispatch(setAlert({message : "insert user successfully", isError : true, open : true}))
+      }
+    } catch (error : any) {
+      dispatch(setAlert({message : error.message, isError : true, open : true}))
+    }
+  }
 
-    insertSchema
-      .validate(userInfo)
-      .then(async (value) => {
-        if(password !== confirmPassword)
-          dispatch(setAlert({open: true, isError: true, message: 'password and confirm password does not match'}))
-        else{
-          const userLoginInfo = await insertUser(userInfo) ;
-          const errorMessage = userLoginInfo.response?.data || "";
-  
-          //update state in store after make a request
-          if (errorMessage !== "")
-            dispatch(
-              setAlert({ isError: true, open: true, message: errorMessage })
-            );
-          else {
-            storeLoginInfo(userLoginInfo);
-            dispatch(
-              setAlert({
-                isError: false,
-                open: true,
-                message: "register successfully",
-              })
-            );
-            dispatch(userLogin(userLoginInfo));
-          }
-        }
-      })
-      .catch((reason) => {
-        dispatch(setAlert({ isError: true, open: true, message: reason.message }));
-      });
-  };
   return (
-    <Container style={{marginTop: '100px'}}>
-      <h1 style={{ textAlign: "center"}}>Add new user</h1>
+    <Container>
+      <h1 style={{ textAlign: "center" }}>Add new user</h1>
       <Form>
         <Form.Group className="mb-3">
           <Form.Label>Email address</Form.Label>
@@ -123,14 +108,14 @@ const AddUser: React.FC = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3">
-        <Form.Label>Admin</Form.Label>
+          <Form.Label>Admin</Form.Label>
           <Form.Check
             type="checkbox"
             onChange={(e) => setAdmin(e.target.checked)}
           />
         </Form.Group>
 
-        <Button variant="primary" onClick={registerHandle}>
+        <Button variant="primary" onClick={insertHandle}>
           Submit
         </Button>
       </Form>

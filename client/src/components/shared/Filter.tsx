@@ -38,7 +38,7 @@ export const Filter: React.FC = () => {
 
   return (
     // <Container >
-      <Row style={{ marginTop: "64px",position: "fixed", width: '100vw', alignItems : 'end'}}>
+      <Row style={{ marginTop: "-36px",position: "fixed", width: '100vw', alignItems : 'end'}}>
         <Form>
           <Form.Group
             className="mb-3"

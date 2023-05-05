@@ -10,16 +10,17 @@ import DoneIcon from "@mui/icons-material/Done";
 import { setAlert } from "../../alert/alert.slice";
 import { getUserByName } from "../../../services/api";
 import { user } from "../../../types/user";
-import { Container } from "react-bootstrap";
+import { Container, Table, Button } from "react-bootstrap";
 import LazyLoad from "react-lazy-load";
 import { manageUser } from "../../../types/manageUser";
 import { deleteUser } from "../../../services/api";
-import Table from "react-bootstrap/Table";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Filter } from "../../shared/Filter";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import { URLSearchParams } from "url";
 class DashBoard extends React.Component {
   static relativeError: number = 10;
 
@@ -45,9 +46,9 @@ class DashBoard extends React.Component {
         localState.isSortAsc
       );
       //notification error if any
-      const errorMessage = response.response?.data || "";
-      if (errorMessage !== "")
-        alert({ isError: true, open: true, message: errorMessage });
+
+      if (typeof response === 'string')
+        alert({ isError: true, open: true, message: response });
       else {
         //update store after fetch api
         const { retriveMoreUser } = this.props as any;
@@ -68,16 +69,19 @@ class DashBoard extends React.Component {
     const { alert } = this.props as any;
     window.addEventListener("scroll", this.lazyFetchUserList);
 
+    console.log('componentDidMount');
+    
     const response = await getUserByName("", 0);
-    const errorMessage = response.response?.data || "";
-    if (errorMessage !== "")
-      alert({ isError: true, open: true, message: errorMessage });
+
+    if (typeof response === 'string' )
+      alert({ isError: true, open: true, message: response });
     else {
       const { initUserList } = this.props as any;
       const actionPayload: user[] = response.results;
       initUserList(actionPayload);
     }
   }
+
 
   async componentDidUpdate(
     prevProps: Readonly<{}>,
@@ -86,23 +90,17 @@ class DashBoard extends React.Component {
   ): Promise<void> {
     const curState = this.state as any;
     if (curState.isSortAsc !== prevState.isSortAsc) {
+      
       const { alert } = this.props as any;
       const {resetUserListBySearch} = this.props as any
       const { dashboardState } = this.props as any;
-      const response = await getUserByName(
-        "",
-        0,
-        dashboardState.filter.isAdmin,
-        dashboardState.filter.addressKey,
-        curState.isSortAsc
-      );
-      const errorMessage = response.response?.data || "";
-      if (errorMessage !== "")
-        alert({ isError: true, open: true, message: errorMessage });
+      const response = await getUserByName("",0,dashboardState.filter.isAdmin,dashboardState.filter.addressKey,curState.isSortAsc);
+      if (typeof response === "string")
+        alert({ isError: true, open: true, message: response });
       else {
         const { initUserList } = this.props as any;
         const actionPayload: user[] = response.results;
-        resetUserListBySearch({keyword: '', currentPage : 0})
+        resetUserListBySearch({keyword: dashboardState.search.keyword, currentPage : 1})
         initUserList(actionPayload);
       }
     }
@@ -128,6 +126,11 @@ class DashBoard extends React.Component {
     }
   };
 
+  redirectToInfoPage = (userId : string) =>{
+    const shareUrl = `http://localhost:3000/info?id=${userId}`
+    window.location.href = shareUrl
+  }
+
   componentWillUnmount(): void {
     window.removeEventListener("scroll", this.lazyFetchUserList);
   }
@@ -135,13 +138,16 @@ class DashBoard extends React.Component {
     const { dashboardState, authState } = this.props as any;
     const isAdmin = authState.admin;
     const userList = dashboardState.userList as user[];
+    const getName = userList.map(el =>el.name)
+    console.log(getName);
+    
     const localState = this.state as any;
     return (
       <div>
         <Filter />
-        <Container style={{ paddingTop: "120px" }}>
+        <Container >
           <LazyLoad height={"80vh"}>
-            <Table responsive>
+            <Table style={{marginTop : '20px'}} responsive>
               <thead>
                 <tr>
                   <th>Avatar</th>
@@ -180,26 +186,25 @@ class DashBoard extends React.Component {
                     {isAdmin && <td>{el.admin && <DoneIcon />}</td>}
                     {isAdmin && (
                       <td>
-                        <button
-                          style={{
-                            border: "none",
-                            backgroundColor: "green",
-                            borderRadius: "4px",
-                          }}
+                        <Button
+                          variant="success"
                           onClick={() => this.updateHandle(el)}
                         >
                           <ModeEditIcon />
-                        </button>
-                        <button
-                          style={{
-                            border: "none",
-                            backgroundColor: "red",
-                            borderRadius: "4px",
-                          }}
-                          onClick={() => this.deleteHandle(el.id as string)}
+                        </Button>
+                        <Button
+                          variant="danger"
+                          onClick={() => window.confirm('you want to delete this user') && this.deleteHandle(el.id as string)}
                         >
                           <DeleteIcon />
-                        </button>
+                        </Button>
+                        <Button
+                          variant="primary"
+                          onClick={()=>this.redirectToInfoPage(el.id as string)}
+                         >
+                          <VisibilityIcon/>
+
+                        </Button>
                       </td>
                     )}
                   </tr>

@@ -20,15 +20,15 @@ export const CustomAlert: React.FC<errorAlert> = () => {
     setOpen(alertStatus.open)
     const turnOffAlert = () => setTimeout(()=>{
       dispatch(unsetAlert())
-    },8000)
+    },5000)
     turnOffAlert()
     clearTimeout(turnOffAlert())
   }, [alertStatus]);
   return (
     <>
       {open ? (
-        <Stack sx={{ width: "100%", position: 'fixed', alignItems : 'end'}}>
-          <Alert severity={isError ? "error" : "success"}>{message}</Alert>
+        <Stack >
+          <Alert sx={{ width: "100%", position: 'fixed', right: '0', bottom : '0'}} severity={isError ? "error" : "success"}>{message}</Alert>
         </Stack>
       ) : (
         <></>

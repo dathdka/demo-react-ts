@@ -28,6 +28,7 @@ const manageSlice = createSlice({
       merge(state.search, action.payload.search);
     },
     resetUserListBySearch: (state, action: PayloadAction<search>) => {
+      merge(state.userList, [])
       merge(state.search, action.payload);
       // merge(state.filter, initialState.filter);
     },

@@ -13,51 +13,36 @@ import moment from "moment";
 const UpdateUser: React.FC = () => {
   const dispatch = useAppDispatch();
   const userLoginInfo = useAppSelector((state) => state.auth);
-  let userUpdateInfo = JSON.parse(
-    window.localStorage.getItem("updateUser") as string
-  ) as user;
+  let userUpdateInfo = JSON.parse(window.localStorage.getItem("updateUser") as string) as user;
   if (!userUpdateInfo?.id)
     userUpdateInfo = JSON.parse(JSON.stringify(userLoginInfo));
 
   const updateHandle = async () => {
     let userInfo: user = {};
-    userInfo = omit(userUpdateInfo, ["password", "token"]);
-    updateSchema
-      .validate(userInfo)
-      .then(async (value) => {
-        const updateResponse = await updateUser(userInfo);
-        const errorMessage = updateResponse.response?.data || "";
-        if (errorMessage !== "")
-          dispatch(
-            setAlert({ isError: true, open: true, message: errorMessage })
-          );
-        else {
-          const userAfterEdit = updateResponse.result as user;
-          
-          if (userAfterEdit.id === userLoginInfo.id){
-            storeLoginInfo(userAfterEdit)
-            dispatch(userLogin(userAfterEdit));
-          }
-          dispatch(
-            setAlert({
-              isError: false,
-              open: true,
-              message: "update successfully",
-            })
-          );
-          window.localStorage.removeItem("updateUser");
-          window.location.pathname = "/dashboard";
+    //remove unnescessary atribute
+    userInfo = omit(userUpdateInfo, ["password", "token", "image"]);
+    try {
+      await updateSchema.validate(userInfo)
+      const updateResponse = await updateUser(userInfo);
+      if (typeof updateResponse === "string")
+          dispatch(setAlert({ isError: true, open: true, message: updateResponse }));
+      else {
+        const userAfterEdit = updateResponse.result as user;
+        
+        if (userAfterEdit.id === userLoginInfo.id){
+          storeLoginInfo(userAfterEdit)
+          dispatch(userLogin(userAfterEdit));
         }
-      })
-      .catch((reason) => {
-        dispatch(
-          setAlert({ isError: true, open: true, message: reason.message })
-        );
-      });
+        window.localStorage.removeItem("updateUser");
+        window.location.pathname = "/dashboard";
+      }
+    }catch(error : any){
+      dispatch(setAlert({ isError: true, open: true, message: error.message }));
+    }
   };
 
   return (
-    <Container style={{ marginTop: "100px" }}>
+    <Container >
       <h1 style={{ textAlign: "center" }}>Update Info</h1>
       <Form>
         <Form.Group className="mb-3">

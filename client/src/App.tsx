@@ -14,6 +14,7 @@ import Dashboard from "./components/pages/Dashboard/Dashboard";
 import { userLogin } from "./components/auth/auth.slice";
 import { getLoginInfo } from "./components/shared/storeLoginInfo";
 import { NavigationBar } from "./components/pages/Dashboard/NavigationBar";
+import { InfoPage } from "./components/pages/Dashboard/InfoPage";
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const dispatch = useAppDispatch();
@@ -27,9 +28,9 @@ function App() {
   }, [userInfo.token]);
 
   return (
-    <>
+    <div style={{ paddingTop: "100px" }}>
+      {isLogin && <NavigationBar />}
       <Router>
-        {isLogin && <NavigationBar />}
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/add-user" element={isLogin ? <AddUser /> : <Login />} />
@@ -41,11 +42,15 @@ function App() {
             path="/update-user"
             element={isLogin ? <UpdateUser /> : <Login />}
           />
+          <Route
+            path="/info"
+            element={<InfoPage/>}
+          />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
         <CustomAlert />
       </Router>
-    </>
+    </div>
   );
 }
 

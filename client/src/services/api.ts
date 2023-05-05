@@ -1,15 +1,24 @@
 import axios from "axios";
 import setting from "../config/setting";
 import { user } from "../types/user";
+
 const api = axios.create({
   baseURL: setting.baseApiUrl,
 });
+
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
+
+//middleware response
+api.interceptors.response.use((response) =>{
+  return response
+},(error) => {
+  return Promise.reject(error.response.data)
+})
 
 export const login = async (userInfo: user) => {
   try {
@@ -68,3 +77,13 @@ export const deleteUser = async (userId: string) => {
     return error;
   }
 };
+
+
+export const getUserById = async (id : string) =>{
+  try {
+    const response = await api.get(`manage/info?id=${id}`)
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+}
