@@ -16,7 +16,7 @@ export const forgetPassword = async (req : Request, res: Response, next : NextFu
         await RedisCli.setKey(storeOTPForConfirm)
         await EmailService.sendEmail(email,otp)
         
-        return res.status(200).send('OTP has been send')
+        return res.status(200).json({success: true})
     } catch (error) {
         next(error)
     }

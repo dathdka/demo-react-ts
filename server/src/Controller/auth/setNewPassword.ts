@@ -21,7 +21,7 @@ export const setNewPassword = async (
         .forUpdate();
 
       await RedisCli.delKey(email);
-      return res.status(200).send("password changed");
+      return res.status(200).json({success: true})
     }
     return res.status(400).send("incorect OTP or expired already");
   } catch (error) {
