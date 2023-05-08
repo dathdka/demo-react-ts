@@ -5,6 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Login from "./components/pages/Auth/Login";
+import ForgetPassword from "./components/pages/Auth/ForgetPassword";
 import AddUser from "./components/pages/Dashboard/AddUser";
 import UpdateUser from "./components/pages/Dashboard/UpdateUser";
 import { useState, useEffect } from "react";
@@ -42,11 +43,12 @@ function App() {
             path="/update-user"
             element={isLogin ? <UpdateUser /> : <Login />}
           />
+          <Route path="/info" element={<InfoPage />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
           <Route
-            path="/info"
-            element={<InfoPage/>}
+            path="/"
+            element={<Navigate to="/dashboard" replace />}
           />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
         <CustomAlert />
       </Router>

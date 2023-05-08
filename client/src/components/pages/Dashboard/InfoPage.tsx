@@ -22,8 +22,8 @@ export const InfoPage: React.FC = () => {
     );
   };
 
-  const redirectUrl = (path: string = "") => 
-    window.location.href = `http://localhost:3000/${path}`
+  const redirectUrl = (path: string = "") =>
+    (window.location.href = `http://localhost:3000/${path}`);
 
   const updateHandle = (userInfo: user) => {
     window.localStorage.setItem("updateUser", JSON.stringify(userInfo));
@@ -55,17 +55,8 @@ export const InfoPage: React.FC = () => {
       <Row>
         <Col></Col>
         <Col>
-          <img src={userInfo.image} alt="img" width="88%" />
-          <h2
-            style={{
-              display: "block",
-              textAlign: "center",
-              fontFamily: "monospace",
-              marginRight: "12%",
-            }}
-          >
-            {userInfo.name}
-          </h2>
+          <img src={userInfo.image} alt="img" className="infopage__row--img" />
+          <h2 className="infopage__row--h2">{userInfo.name}</h2>
         </Col>
         <Col>
           <Alert>
@@ -76,7 +67,7 @@ export const InfoPage: React.FC = () => {
               <li>Phone number : {userInfo.phone}</li>
             </ul>
           </Alert>
-          <div style={{ margin: "0 25%" }}>
+          <div className="infopage__row--buttoncontainer">
             {authState.admin && (
               <Button variant="success" onClick={() => updateHandle(userInfo)}>
                 <ModeEditIcon />

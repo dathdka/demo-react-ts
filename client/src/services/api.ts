@@ -1,7 +1,8 @@
 import axios from "axios";
 import setting from "../config/setting";
 import { user } from "../types/user";
-
+import { forgetPassword } from "../types/forgetPassword";
+import { omit } from "lodash";
 const api = axios.create({
   baseURL: setting.baseApiUrl,
 });
@@ -83,6 +84,24 @@ export const getUserById = async (id : string) =>{
   try {
     const response = await api.get(`manage/info?id=${id}`)
     return response.data;
+  } catch (error) {
+    return error;
+  }
+}
+
+export const sendOTP = async (email: string) =>{
+  try {
+    const response = await api.post('auth/forget-password',{email})
+    return response.data
+  } catch (error) {
+    return error;
+  }
+}
+
+export const setNewPassword = async (passwordInfo : forgetPassword) =>{
+  try {
+    const response = await api.post('auth/set-new-password',omit(passwordInfo))
+    return response.data    
   } catch (error) {
     return error;
   }

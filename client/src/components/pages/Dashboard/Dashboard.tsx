@@ -68,7 +68,6 @@ class DashBoard extends React.Component {
     const { alert } = this.props as any;
     window.addEventListener("scroll", this.lazyFetchUserList);
 
-    console.log('componentDidMount');
 
     const response = await getUserByName("", 0);
 
@@ -138,7 +137,6 @@ class DashBoard extends React.Component {
     const isAdmin = authState.admin;
     const userList = dashboardState.userList as user[];
     const getName = userList.map(el =>el.name)
-    console.log(getName);
     
     const localState = this.state as any;
     return (

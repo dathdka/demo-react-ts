@@ -27,28 +27,32 @@ const Login: React.FC = (userInfo: user) => {
     };
 
     const userLoginInfo = await login(account);
-    const errorMessage = userLoginInfo.response?.data || "";
 
     //update state in store after make a request
-    if (errorMessage !== "")
-      dispatch(setAlert({ isError: true, open: true, message: errorMessage }));
+    if (typeof userLoginInfo === "string")
+      dispatch(setAlert({ isError: true, open: true, message: userLoginInfo }));
     else {
       storeLoginInfo(userLoginInfo);
       dispatch(
         setAlert({ isError: false, open: true, message: "login successfully" })
       );
       dispatch(userLogin(userLoginInfo));
+      window.location.pathname = '/dashboard'
     }
   };
   return (
     <Row>
       <Col></Col>
       <Col>
-        <h1 style={{ marginLeft: "40%", marginTop: "100px" }}>Login</h1>
+        <h1 className="loginpage_container--text">Login</h1>
         <Form>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" onChange={emailHandler} />
+            <Form.Control
+              type="email"
+              placeholder="Enter email"
+              onChange={emailHandler}
+            />
             <Form.Text className="text-muted">
               We'll never share your email with anyone else.
             </Form.Text>
@@ -56,11 +60,22 @@ const Login: React.FC = (userInfo: user) => {
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" onChange={passwordHandler} />
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              onChange={passwordHandler}
+            />
+
+            <Form.Text className="text-muted">
+              <a href="/forget-password">Forget password ?</a>
+            </Form.Text>
           </Form.Group>
           <Button
             variant="primary"
-            onClick={(e) => {e.preventDefault(); loginHandle()} }
+            onClick={(e) => {
+              e.preventDefault();
+              loginHandle();
+            }}
             type="submit"
           >
             Submit

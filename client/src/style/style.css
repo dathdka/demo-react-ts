@@ -1,3 +1,44 @@
 .dashboard-table {
     margin-top: 20px;
 }
+
+.infopage__row--img{
+    width: 88%;
+}
+
+.infopage__row--h2{
+    display: block;
+    text-align: center;
+    font-family: monospace;
+    margin-right: 12%;
+}
+
+.infopage__row--buttoncontainer{
+    margin: 0 25%;
+}
+
+.navigationbar__box{
+    flex-grow: 1;
+}
+
+.navigationbar__box--appbar{
+    position: fixed;
+}
+
+.navigationbar__box--button{
+    color: white;
+}
+
+.updatepage__container--text {
+    text-align: center;
+}
+
+.loginpage_container--text {
+    margin-left: 40%;
+    margin-top: 100px;
+}
+
+.forgetpage__form--box{
+    display: flex;
+}
+

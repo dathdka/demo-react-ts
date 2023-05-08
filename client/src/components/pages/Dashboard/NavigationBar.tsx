@@ -114,8 +114,8 @@ export const NavigationBar: React.FC = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed">
+    <Box className="navigationbar__box">
+      <AppBar className="navigationbar__box--appbar">
         <Toolbar>
           {authState.admin && (
             <Button
@@ -141,7 +141,6 @@ export const NavigationBar: React.FC = () => {
           </Button>
           <Button
             variant="outlined"
-            style={{ color: "white" }}
             onClick={dashboardRedirect}
           >
             <HomeIcon
@@ -154,9 +153,8 @@ export const NavigationBar: React.FC = () => {
           <Button
             variant="outlined"
             onClick={logoutHandle}
-            style={{ color: "white" }}
           >
-            <LogoutIcon />
+            <LogoutIcon className="navigationbar__box--button"/>
           </Button>
           <Search>
             <SearchIconWrapper>

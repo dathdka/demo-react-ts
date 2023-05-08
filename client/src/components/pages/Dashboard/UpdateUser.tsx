@@ -43,7 +43,7 @@ const UpdateUser: React.FC = () => {
 
   return (
     <Container >
-      <h1 style={{ textAlign: "center" }}>Update Info</h1>
+      <h1 className="updatepage__container--text">Update Info</h1>
       <Form>
         <Form.Group className="mb-3">
           <Form.Label>Email address</Form.Label>

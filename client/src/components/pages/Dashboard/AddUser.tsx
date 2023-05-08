@@ -50,7 +50,7 @@ const AddUser: React.FC = () => {
 
   return (
     <Container>
-      <h1 style={{ textAlign: "center" }}>Add new user</h1>
+      <h1 className="updatepage__container--text">Add new user</h1>
       <Form>
         <Form.Group className="mb-3">
           <Form.Label>Email address</Form.Label>
